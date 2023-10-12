@@ -27,7 +27,7 @@ class ApplicationController extends Controller
             return response()->json(status: 403);
         }
 
-        $paginator  = Application::query()->orderBy('id')
+        $paginator  = Application::query()->with('bank')->orderBy('id')
             ->paginate($this->perPage, page: $request->page);
 
         return response()->json([
