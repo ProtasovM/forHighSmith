@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Application;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -22,6 +23,10 @@ class ApplicationController extends Controller
 
     public function get(Request $request): JsonResponse
     {
+        if ($request->user()->cannot(__FUNCTION__, Application::class)) {
+            return response()->json(status: 403);
+        }
+
         $paginator  = Application::query()->orderBy('id')
             ->paginate($this->perPage, page: $request->page);
 
@@ -34,6 +39,10 @@ class ApplicationController extends Controller
 
     public function create(Request $request): JsonResponse
     {
+        if ($request->user()->cannot(__FUNCTION__, Application::class)) {
+            return response()->json(status: 403);
+        }
+
         $this->validate($request, $this->validationRules);
 
         $application = Application::create(
@@ -51,6 +60,10 @@ class ApplicationController extends Controller
             return response()->json(status: 204);
         }
 
+        if ($request->user()->cannot(__FUNCTION__, $application)) {
+            return response()->json(status: 403);
+        }
+
         $this->validate(
             $request,
             array_intersect_key($this->validationRules, $request->all())
@@ -63,12 +76,16 @@ class ApplicationController extends Controller
         return response()->json($application);
     }
 
-    public function delete($id): JsonResponse
+    public function delete(Request $request, $id): JsonResponse
     {
         $application = Application::find($id);
 
         if (!$application) {
             return response()->json([], 204);
+        }
+
+        if ($request->user()->cannot(__FUNCTION__, $application)) {
+            return response()->json(status: 403);
         }
 
         $application->delete();
