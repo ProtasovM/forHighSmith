@@ -1,7 +1,5 @@
 <?php
 
-/** @var \Laravel\Lumen\Routing\Router $router */
-
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -12,11 +10,16 @@
 | and give it the Closure to call when that URI is requested.
 |
 */
+
+use Laravel\Lumen\Routing\Router;
+
+/** @var Router $router */
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
 $router->group([
+    'prefix' => '/auth',
 ], function () use ($router) {
     $router->post('login', 'AuthController@login');
 });
@@ -27,6 +30,22 @@ $router->group([
     /*
      * Auth
      */
-    $router->post('logout', 'AuthController@logout');
-    $router->post('refresh', 'AuthController@refresh');
+    $router->group([
+        'prefix' => '/auth',
+    ], function ($router) {
+        $router->post('logout', 'AuthController@logout');
+        $router->post('refresh', 'AuthController@refresh');
+    });
+
+    /*
+     * Application
+     */
+    $router->group([
+        'prefix' => '/applications',
+    ], function ($router) {
+        $router->get('/', 'ApplicationController@get');
+        $router->post('/', 'ApplicationController@create');
+        $router->patch('/{id}', 'ApplicationController@update');
+        $router->delete('/{id}', 'ApplicationController@delete');
+    });
 });
