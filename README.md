@@ -1,26 +1,33 @@
-# Lumen PHP Framework
+# Домашнее задание для Хайсмит
 
-[![Build Status](https://travis-ci.org/laravel/lumen-framework.svg)](https://travis-ci.org/laravel/lumen-framework)
-[![Total Downloads](https://img.shields.io/packagist/dt/laravel/lumen-framework)](https://packagist.org/packages/laravel/lumen-framework)
-[![Latest Stable Version](https://img.shields.io/packagist/v/laravel/lumen-framework)](https://packagist.org/packages/laravel/lumen-framework)
-[![License](https://img.shields.io/packagist/l/laravel/lumen)](https://packagist.org/packages/laravel/lumen-framework)
+Задача:
+Необходимо создать RESTful API для управления заявками от дилеров на выдачу кредитов в
+автомобильной корпорации.
 
-Laravel Lumen is a stunningly fast PHP micro-framework for building web applications with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Lumen attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as routing, database abstraction, queueing, and caching.
+API должно предоставлять следующие функциональности:
+1. Создание, просмотр, редактирование и удаление заявок от дилеров на выдачу
+   кредитов.
+2. Каждая заявка должна содержать следующие атрибуты: дилер (название дилера),
+   контактное лицо (сотрудник дилера), сумма кредита, срок кредита, процентная ставка,
+   описание причины кредита, статус заявки (например, новая, в процессе, одобрена,
+   отклонена), дата создания и дата обновления.
+3. Сотрудники корпорации могут просматривать список всех заявок, с пагинацией.
+4. Каждая заявка должна быть связана с определенным банком.
+5. API должно использовать PostgreSQL для хранения информации о заявках, банках.
 
-> **Note:** In the years since releasing Lumen, PHP has made a variety of wonderful performance improvements. For this reason, along with the availability of [Laravel Octane](https://laravel.com/docs/octane), we no longer recommend that you begin new projects with Lumen. Instead, we recommend always beginning new projects with [Laravel](https://laravel.com).
 
-## Official Documentation
+   Требования:
+1. Решение должно быть размещено на GitHub. Создайте открытый репозиторий для
+   вашего проекта и разместите в нем код вашего решения.
+2. Развертывание проекта должно производиться с помощью Docker контейнеров,
+   используя docker-compose.yml. Вам потребуется настроить следующие контейнеры:
+   1. nginx: Веб-сервер Nginx для обслуживания RESTful API.
+   2. php-fpm: PHP-FPM для выполнения PHP-скриптов. 
+   3. postgresql: Контейнер с PostgreSQL для хранения данных о заявках и других сущностях.
 
-Documentation for the framework can be found on the [Lumen website](https://lumen.laravel.com/docs).
-
-## Contributing
-
-Thank you for considering contributing to Lumen! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Lumen, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Lumen framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+3. В docker-compose.yml укажите все необходимые настройки и переменные окружения
+   для контейнеров, включая настройки подключения к базам данных PostgreSQL, а также
+   настройки Nginx.
+4. Предоставьте инструкции по развертыванию проекта с использованием Docker.
+   Включите команды для сборки и запуска контейнеров, а также настройки окружения,
+   которые могут потребоваться для корректной работы приложения.
