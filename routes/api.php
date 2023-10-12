@@ -12,7 +12,21 @@
 | and give it the Closure to call when that URI is requested.
 |
 */
-
 $router->get('/', function () use ($router) {
     return $router->app->version();
+});
+
+$router->group([
+], function () use ($router) {
+    $router->post('login', 'AuthController@login');
+});
+
+$router->group([
+    'middleware' => 'auth',
+], function () use ($router) {
+    /*
+     * Auth
+     */
+    $router->post('logout', 'AuthController@logout');
+    $router->post('refresh', 'AuthController@refresh');
 });
