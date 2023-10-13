@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Application;
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -23,12 +22,40 @@ class ApplicationController extends Controller
 
     public function get(Request $request): JsonResponse
     {
-        if ($request->user()->cannot(__FUNCTION__, Application::class)) {
+        if ((int) $request->id > 0) {
+            return $this->getOne($request);
+        } else {
+            return $this->getPaginatable($request);
+        }
+    }
+
+    protected function getOne(Request $request): JsonResponse
+    {
+        $application = Application::find((int) $request->id);
+
+        if (!$application) {
+            return response()->json(status: 204);
+        }
+
+        if ($request->user()->cannot('get', $application)) {
+            return response()->json(status: 403);
+        }
+
+        return response()->json($application);
+    }
+
+    protected function getPaginatable(Request $request): JsonResponse
+    {
+        if ($request->user()->cannot('get', Application::class)) {
             return response()->json(status: 403);
         }
 
         $paginator  = Application::query()->with('bank')->orderBy('id')
             ->paginate($this->perPage, page: $request->page);
+
+        if ($paginator->total() == 0) {
+            return response()->json(status: 204);
+        }
 
         return response()->json([
             'items' => $paginator->items(),
@@ -52,7 +79,7 @@ class ApplicationController extends Controller
         return response()->json($application);
     }
 
-    public function update(Request $request, $id): JsonResponse
+    public function update(Request $request, int $id): JsonResponse
     {
         $application = Application::find($id);
 
@@ -76,7 +103,7 @@ class ApplicationController extends Controller
         return response()->json($application);
     }
 
-    public function delete(Request $request, $id): JsonResponse
+    public function delete(Request $request, int $id): JsonResponse
     {
         $application = Application::find($id);
 

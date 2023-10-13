@@ -7,7 +7,7 @@ use App\Models\User;
 
 class ApplicationPolicy
 {
-    public function get(User $user): bool
+    public function get(User $user, Application $application = null): bool
     {
         return true;
     }
@@ -17,12 +17,12 @@ class ApplicationPolicy
         return false;
     }
 
-    public function update(User $user, Application $post): bool
+    public function update(User $user, Application $application): bool
     {
         return false;
     }
 
-    public function delete(User $user, Application $post): bool
+    public function delete(User $user, Application $application): bool
     {
         return false;
     }
