@@ -76,7 +76,7 @@ class ApplicationController extends Controller
             $request->only(array_keys($this->validationRules))
         );
 
-        return response()->json($application);
+        return response()->json($application, 201);
     }
 
     public function update(Request $request, int $id): JsonResponse
